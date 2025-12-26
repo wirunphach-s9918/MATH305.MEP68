@@ -153,7 +153,7 @@
             '22916_305MEP68': {
                 studentId: '22916',
                 classCode: '305MEP68',
-                name: 'เด็กชายนัฐภาค ศรีจินดา',
+                name: 'เด็กชายนัฐภา�� ศร��จินดา',
                 grade: 'ป.3/5',
                 mathScore: 8,
                 fullScore: 20
@@ -185,7 +185,7 @@
             '22920_305MEP68': {
                 studentId: '22920',
                 classCode: '305MEP68',
-                name: 'เด็กชายจิตติพัฒน์ สีคปัต',
+                name: '��ด็กชายจิตติพัฒน์ สีคปัต',
                 grade: 'ป.3/5',
                 mathScore: 17,
                 fullScore: 20
@@ -217,7 +217,7 @@
             '21431_305MEP68': {
                 studentId: '21431',
                 classCode: '305MEP68',
-                name: 'เด็กหญิงวรรณวิสา อินรองพล',
+                name: 'เด็กหญิงวรร��วิสา อินรองพล',
                 grade: 'ป.3/5',
                 mathScore: 6,
                 fullScore: 20
@@ -305,7 +305,7 @@
             '22934_305MEP68': {
                 studentId: '22934',
                 classCode: '305MEP68',
-                name: 'เด็กหญิงพรหมเทพ ลักษวุธ',
+                name: 'เ��็กหญิงพรหมเทพ ลักษวุธ',
                 grade: 'ป.3/5',
                 mathScore: 3,
                 fullScore: 20
@@ -505,7 +505,7 @@
             const student = studentData[searchKey];
             
             if (!student) {
-                showError('❌ ไม่พบข้อมูล กรุณาตรวจสอบเลขประจำตัวและรหัสห้องเรียนอีกครั้ง');
+                showError('❌ ไม่พบข้อมูล กรุณา��รวจสอบเลขประจำตัวและ��หัสห้องเรียนอีกครั้ง');
                 return;
             }
             
@@ -531,7 +531,7 @@
             scoreCard.className = `score-card rounded-3xl p-8 text-white ${getGradeClass(parseFloat(percentage))}`;
             scoreCard.innerHTML = `
                 <div class="text-center">
-                    <div class="subject-name font-semibold mb-6">📐 คณิตศาสตร์<br>บทที่ 9 เรื่อง การวัดความยาว 📏</div>
+                    <div class="subject-name font-semibold mb-6">📐 คณิตศาสตร์<br>บทที่ 9 การวัดความยาว 📏</div>
                     <div class="flex items-baseline justify-center gap-3 mb-4">
                         <div class="score-value font-bold">${student.mathScore}</div>
                         <div class="full-score opacity-90">/ ${student.fullScore}</div>
@@ -711,5 +711,5 @@
             init();
         }
     </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9b3efc729520a1b0',t:'MTc2NjczNTQxNC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9b3f075916168940',t:'MTc2NjczNTg2MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
