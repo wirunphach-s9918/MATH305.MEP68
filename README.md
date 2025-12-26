@@ -1,4 +1,3 @@
-<!doctype html>
 <html lang="th" class="h-full">
  <head>
   <meta charset="UTF-8">
@@ -142,7 +141,6 @@
             button_text: 'ดูคะแนนของฉัน ✨'
         };
 
-        // ข้อมูลนักเรียน 22 คน ชั้น ป.3/5
         const studentData = {
             '21391_305MEP68': {
                 studentId: '21391',
@@ -179,7 +177,7 @@
             '22919_305MEP68': {
                 studentId: '22919',
                 classCode: '305MEP68',
-                name: 'เด็กชายวีต์ภัฐนนท์ เรืองวงษ์งาม',
+                name: 'เด็กชายวีรภัฐนนท์ เรืองวงษ์งาม',
                 grade: 'ป.3/5',
                 mathScore: 16,
                 fullScore: 20
@@ -187,7 +185,7 @@
             '22920_305MEP68': {
                 studentId: '22920',
                 classCode: '305MEP68',
-                name: 'เด็กชายจิตติพัฒน์ นาคปัต',
+                name: 'เด็กชายจิตติพัฒน์ สีคปัต',
                 grade: 'ป.3/5',
                 mathScore: 17,
                 fullScore: 20
@@ -203,7 +201,7 @@
             '23086_305MEP68': {
                 studentId: '23086',
                 classCode: '305MEP68',
-                name: 'เด็กชายว��พุ��� อินทร์แก้ว',
+                name: 'เด็กชายวีรพุฒ อินทร์แก้ว',
                 grade: 'ป.3/5',
                 mathScore: 5,
                 fullScore: 20
@@ -338,7 +336,7 @@
             if (percent >= 70) return '🌟 เก่งมาก! ทำได้ดีเลยนะคะ 🌟';
             if (percent >= 60) return '👏 ทำได้ดีมาก ใกล้เป้าหมายแล้วนะคะ 👏';
             if (percent >= 50) return '💪 เริ่มต้นได้ดี อย่าท้อนะคะ ความเก่งกำลังมา 💪';
-            if (percent >= 30) return '📚 ค่อยๆ ฝึกนะคะ เดี๋ยวจะขึ้นค่ะ 📚';
+            if (percent >= 30) return '📚 ค่อยๆ ฝึกนะคะ เดี่ยวจะขึ้นค่ะ 📚';
             if (percent >= 15) return '✏️ เริ่มใหม่ได้เสมอ ฝึกทำโจทย์เยอะๆ นะคะ ✏️';
             return '💖 ฝึกทำโจทย์เยอะๆ นะคะ และตั้งใจให้มากขึ้นนะคะ 💖';
         }
@@ -489,7 +487,7 @@
             resultDiv.classList.add('hidden');
             
             if (!studentId) {
-                showError('ก��ุณากรอกเลขประจำตัวนักเรียน ���');
+                showError('กรุณากรอกเลขประจำตัวนักเรียน 📝');
                 return;
             }
             
@@ -499,7 +497,7 @@
             }
             
             if (!classCode) {
-                showError('กรุณากรอก���หัสห้องเรียน 📝');
+                showError('กรุณากรอกรหัสห้องเรียน 📝');
                 return;
             }
             
@@ -533,7 +531,7 @@
             scoreCard.className = `score-card rounded-3xl p-8 text-white ${getGradeClass(parseFloat(percentage))}`;
             scoreCard.innerHTML = `
                 <div class="text-center">
-                    <div class="subject-name font-semibold mb-6">📐 คณิตศาสตร์<br>บทที่ 7 เรื่อง เวลา ⏰</div>
+                    <div class="subject-name font-semibold mb-6">📐 คณิตศาสตร์<br>บทที่ 9 เรื่อง การวัดความยาว 📏</div>
                     <div class="flex items-baseline justify-center gap-3 mb-4">
                         <div class="score-value font-bold">${student.mathScore}</div>
                         <div class="full-score opacity-90">/ ${student.fullScore}</div>
@@ -566,7 +564,7 @@
                         <div class="w-full max-w-4xl">
                             <header class="text-center mb-10">
                                 <div class="math-icon text-6xl mb-4">🎯📐✏️</div>
-                                <h1 id="main-title" class="font-bold mb-2">ระ���บตรวจสอบคะแนนวิชาคณิตศาสตร์</h1>
+                                <h1 id="main-title" class="font-bold mb-2">ระบบตรวจสอบคะแนนวิชาคณิตศาสตร์</h1>
                                 <p id="main-subtitle" class="font-semibold mb-1">ชั้นประถมศึกษาปีที่ 3/5 (MEP)</p>
                                 <p id="teacher-info" class="opacity-80">ครูผู้สอน นางวิรัลพัชษ์ สว่างเดือน</p>
                             </header>
@@ -575,7 +573,7 @@
                                 <form id="search-form" class="max-w-lg mx-auto">
                                     <div class="mb-6">
                                         <label id="input-label-1" for="student-id" class="block font-semibold mb-2">
-                                            เลขประจำตัวนักเรีย�� (5 หลัก)
+                                            เลขประจำตัวนักเรียน (5 หลัก)
                                         </label>
                                         <input 
                                             type="text" 
@@ -713,5 +711,5 @@
             init();
         }
     </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9b3eefad81b0894f',t:'MTc2NjczNDg5MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9b3efc729520a1b0',t:'MTc2NjczNTQxNC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
