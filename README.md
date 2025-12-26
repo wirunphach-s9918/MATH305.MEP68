@@ -1,3 +1,4 @@
+<!doctype html>
 <html lang="th" class="h-full">
  <head>
   <meta charset="UTF-8">
@@ -141,181 +142,181 @@
             button_text: 'ดูคะแนนของฉัน ✨'
         };
 
-        // ข้อมูลนักเรียน 22 คน
+        // ข้อมูลนักเรียน 22 คน ชั้น ป.3/5
         const studentData = {
-            '21391_205MEP68': {
+            '21391_305MEP68': {
                 studentId: '21391',
-                classCode: '205MEP68',
+                classCode: '305MEP68',
                 name: 'เด็กชายภาคิน เพิ่มพูล',
-                grade: 'ป.2/5',
+                grade: 'ป.3/5',
                 mathScore: 17,
                 fullScore: 20
             },
-            '22916_205MEP68': {
+            '22916_305MEP68': {
                 studentId: '22916',
-                classCode: '205MEP68',
-                name: 'เด็กชายนัฐภาค ศรีจินด�����',
-                grade: 'ป.2/5',
+                classCode: '305MEP68',
+                name: 'เด็กชายนัฐภาค ศรีจินดา',
+                grade: 'ป.3/5',
                 mathScore: 8,
                 fullScore: 20
             },
-            '22917_205MEP68': {
+            '22917_305MEP68': {
                 studentId: '22917',
-                classCode: '205MEP68',
+                classCode: '305MEP68',
                 name: 'เด็กชายธนาธิป ใจสวย',
-                grade: 'ป.2/5',
+                grade: 'ป.3/5',
                 mathScore: 18,
                 fullScore: 20
             },
-            '22918_205MEP68': {
+            '22918_305MEP68': {
                 studentId: '22918',
-                classCode: '205MEP68',
+                classCode: '305MEP68',
                 name: 'เด็กชายศุภณัฐ พันธ์สถิตย์',
-                grade: 'ป.2/5',
+                grade: 'ป.3/5',
                 mathScore: 9,
                 fullScore: 20
             },
-            '22919_205MEP68': {
+            '22919_305MEP68': {
                 studentId: '22919',
-                classCode: '205MEP68',
+                classCode: '305MEP68',
                 name: 'เด็กชายวีต์ภัฐนนท์ เรืองวงษ์งาม',
-                grade: 'ป.2/5',
+                grade: 'ป.3/5',
                 mathScore: 16,
                 fullScore: 20
             },
-            '22920_205MEP68': {
+            '22920_305MEP68': {
                 studentId: '22920',
-                classCode: '205MEP68',
+                classCode: '305MEP68',
                 name: 'เด็กชายจิตติพัฒน์ นาคปัต',
-                grade: 'ป.2/5',
+                grade: 'ป.3/5',
                 mathScore: 17,
                 fullScore: 20
             },
-            '22922_205MEP68': {
+            '22922_305MEP68': {
                 studentId: '22922',
-                classCode: '205MEP68',
+                classCode: '305MEP68',
                 name: 'เด็กชายชิติพัทธ์ พระเทศ',
-                grade: 'ป.2/5',
+                grade: 'ป.3/5',
                 mathScore: 15,
                 fullScore: 20
             },
-            '23086_205MEP68': {
+            '23086_305MEP68': {
                 studentId: '23086',
-                classCode: '205MEP68',
-                name: 'เด็กชายวิพุธ อินทร์แก้��',
-                grade: 'ป.2/5',
+                classCode: '305MEP68',
+                name: 'เด็กชายว��พุ��� อินทร์แก้ว',
+                grade: 'ป.3/5',
                 mathScore: 5,
                 fullScore: 20
             },
-            '23391_205MEP68': {
+            '23391_305MEP68': {
                 studentId: '23391',
-                classCode: '205MEP68',
+                classCode: '305MEP68',
                 name: 'เด็กชายณัฐธัญ สีดี',
-                grade: 'ป.2/5',
+                grade: 'ป.3/5',
                 mathScore: 7,
                 fullScore: 20
             },
-            '21431_205MEP68': {
+            '21431_305MEP68': {
                 studentId: '21431',
-                classCode: '205MEP68',
+                classCode: '305MEP68',
                 name: 'เด็กหญิงวรรณวิสา อินรองพล',
-                grade: 'ป.2/5',
+                grade: 'ป.3/5',
                 mathScore: 6,
                 fullScore: 20
             },
-            '21932_205MEP68': {
+            '21932_305MEP68': {
                 studentId: '21932',
-                classCode: '205MEP68',
+                classCode: '305MEP68',
                 name: 'เด็กหญิงนรสิตา อำนวย',
-                grade: 'ป.2/5',
+                grade: 'ป.3/5',
                 mathScore: 9,
                 fullScore: 20
             },
-            '22925_205MEP68': {
+            '22925_305MEP68': {
                 studentId: '22925',
-                classCode: '205MEP68',
+                classCode: '305MEP68',
                 name: 'เด็กหญิงวรนิษฐ์ พงษ์จำปา',
-                grade: 'ป.2/5',
+                grade: 'ป.3/5',
                 mathScore: 13,
                 fullScore: 20
             },
-            '22926_205MEP68': {
+            '22926_305MEP68': {
                 studentId: '22926',
-                classCode: '205MEP68',
+                classCode: '305MEP68',
                 name: 'เด็กหญิงศิขรินทร์ สุขสด',
-                grade: 'ป.2/5',
+                grade: 'ป.3/5',
                 mathScore: 10,
                 fullScore: 20
             },
-            '22927_205MEP68': {
+            '22927_305MEP68': {
                 studentId: '22927',
-                classCode: '205MEP68',
+                classCode: '305MEP68',
                 name: 'เด็กหญิงภิญญดา ตั้งคุณธรรม',
-                grade: 'ป.2/5',
+                grade: 'ป.3/5',
                 mathScore: 14,
                 fullScore: 20
             },
-            '22928_205MEP68': {
+            '22928_305MEP68': {
                 studentId: '22928',
-                classCode: '205MEP68',
-                name: 'เด็กหญิงณั���ฐณิชา จุลชีพ',
-                grade: 'ป.2/5',
+                classCode: '305MEP68',
+                name: 'เด็กหญิงณัฏฐณิชา จุลชีพ',
+                grade: 'ป.3/5',
                 mathScore: 15,
                 fullScore: 20
             },
-            '22929_205MEP68': {
+            '22929_305MEP68': {
                 studentId: '22929',
-                classCode: '205MEP68',
+                classCode: '305MEP68',
                 name: 'เด็กหญิงณิชาภัทร บุปผา',
-                grade: 'ป.2/5',
+                grade: 'ป.3/5',
                 mathScore: 9,
                 fullScore: 20
             },
-            '22930_205MEP68': {
+            '22930_305MEP68': {
                 studentId: '22930',
-                classCode: '205MEP68',
+                classCode: '305MEP68',
                 name: 'เด็กหญิงนภัสวรรณ ขาวโต',
-                grade: 'ป.2/5',
+                grade: 'ป.3/5',
                 mathScore: 10,
                 fullScore: 20
             },
-            '22931_205MEP68': {
+            '22931_305MEP68': {
                 studentId: '22931',
-                classCode: '205MEP68',
+                classCode: '305MEP68',
                 name: 'เด็กหญิงนิภาธร แจ้งในเมือง',
-                grade: 'ป.2/5',
+                grade: 'ป.3/5',
                 mathScore: 5,
                 fullScore: 20
             },
-            '22932_205MEP68': {
+            '22932_305MEP68': {
                 studentId: '22932',
-                classCode: '205MEP68',
+                classCode: '305MEP68',
                 name: 'เด็กหญิงธนัชชา พุฒิพรธนกุล',
-                grade: 'ป.2/5',
+                grade: 'ป.3/5',
                 mathScore: 15,
                 fullScore: 20
             },
-            '22933_205MEP68': {
+            '22933_305MEP68': {
                 studentId: '22933',
-                classCode: '205MEP68',
+                classCode: '305MEP68',
                 name: 'เด็กหญิงวนิดา ศรีม่วง',
-                grade: 'ป.2/5',
+                grade: 'ป.3/5',
                 mathScore: 6,
                 fullScore: 20
             },
-            '22934_205MEP68': {
+            '22934_305MEP68': {
                 studentId: '22934',
-                classCode: '205MEP68',
-                name: 'เด็กหญิงพ��หมเทพ ลักษวุธ',
-                grade: 'ป.2/5',
+                classCode: '305MEP68',
+                name: 'เด็กหญิงพรหมเทพ ลักษวุธ',
+                grade: 'ป.3/5',
                 mathScore: 3,
                 fullScore: 20
             },
-            '22935_205MEP68': {
+            '22935_305MEP68': {
                 studentId: '22935',
-                classCode: '205MEP68',
+                classCode: '305MEP68',
                 name: 'เด็กหญิงธันชนก ปุณณินท์',
-                grade: 'ป.2/5',
+                grade: 'ป.3/5',
                 mathScore: 11,
                 fullScore: 20
             }
@@ -488,7 +489,7 @@
             resultDiv.classList.add('hidden');
             
             if (!studentId) {
-                showError('กรุณากรอกเลขประจำตัวนักเรียน 🙏');
+                showError('ก��ุณากรอกเลขประจำตัวนักเรียน ���');
                 return;
             }
             
@@ -498,7 +499,7 @@
             }
             
             if (!classCode) {
-                showError('กรุณากรอกรหัสห้องเรียน 📝');
+                showError('กรุณากรอก���หัสห้องเรียน 📝');
                 return;
             }
             
@@ -538,7 +539,7 @@
                         <div class="full-score opacity-90">/ ${student.fullScore}</div>
                     </div>
                     <div class="percentage-text font-semibold bg-white bg-opacity-20 rounded-full px-6 py-2 inline-block">
-                        คิ���เป็น ${percentage}%
+                        คิดเป็น ${percentage}%
                     </div>
                 </div>
             `;
@@ -565,7 +566,7 @@
                         <div class="w-full max-w-4xl">
                             <header class="text-center mb-10">
                                 <div class="math-icon text-6xl mb-4">🎯📐✏️</div>
-                                <h1 id="main-title" class="font-bold mb-2">ระบบตรวจสอบคะแนนวิชาคณ��ตศาสตร์</h1>
+                                <h1 id="main-title" class="font-bold mb-2">ระ���บตรวจสอบคะแนนวิชาคณิตศาสตร์</h1>
                                 <p id="main-subtitle" class="font-semibold mb-1">ชั้นประถมศึกษาปีที่ 3/5 (MEP)</p>
                                 <p id="teacher-info" class="opacity-80">ครูผู้สอน นางวิรัลพัชษ์ สว่างเดือน</p>
                             </header>
@@ -574,7 +575,7 @@
                                 <form id="search-form" class="max-w-lg mx-auto">
                                     <div class="mb-6">
                                         <label id="input-label-1" for="student-id" class="block font-semibold mb-2">
-                                            เลขประจำตัวนักเรียน (5 หลัก)
+                                            เลขประจำตัวนักเรีย�� (5 หลัก)
                                         </label>
                                         <input 
                                             type="text" 
@@ -712,5 +713,5 @@
             init();
         }
     </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9b3ed738a350895b',t:'MTc2NjczMzg4OS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9b3eefad81b0894f',t:'MTc2NjczNDg5MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
