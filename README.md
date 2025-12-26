@@ -1,78 +1,83 @@
 <html lang="th" class="h-full">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ระบบตรวจสอบคะแนนนักเรียน</title>
+
   <script src="/_sdk/element_sdk.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+
   <style>
     body { box-sizing: border-box; }
     @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;600;700&display=swap');
     * { font-family: 'Sarabun', sans-serif; }
 
-    .math-pattern {
+    .math-pattern{
       background-image:
-        linear-gradient(45deg, rgba(59, 130, 246, 0.05) 25%, transparent 25%),
-        linear-gradient(-45deg, rgba(96, 165, 250, 0.05) 25%, transparent 25%),
-        linear-gradient(45deg, transparent 75%, rgba(59, 130, 246, 0.05) 75%),
-        linear-gradient(-45deg, transparent 75%, rgba(96, 165, 250, 0.05) 75%);
+        linear-gradient(45deg, rgba(59,130,246,.05) 25%, transparent 25%),
+        linear-gradient(-45deg, rgba(96,165,250,.05) 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, rgba(59,130,246,.05) 75%),
+        linear-gradient(-45deg, transparent 75%, rgba(96,165,250,.05) 75%);
       background-size: 60px 60px;
       background-position: 0 0, 0 30px, 30px -30px, -30px 0px;
     }
 
-    .score-card { transition: transform 0.3s ease, box-shadow 0.3s ease; }
-    .score-card:hover {
+    .score-card{ transition: transform .3s ease, box-shadow .3s ease; }
+    .score-card:hover{
       transform: translateY(-4px) rotate(1deg);
-      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+      box-shadow: 0 12px 24px rgba(0,0,0,.15);
     }
 
-    .grade-excellent { background: linear-gradient(135deg, #10b981 0%, #059669 100%); }
-    .grade-good { background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); }
-    .grade-fair { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); }
-    .grade-poor { background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); }
+    .grade-excellent{ background: linear-gradient(135deg,#10b981 0%,#059669 100%); }
+    .grade-good{ background: linear-gradient(135deg,#3b82f6 0%,#2563eb 100%); }
+    .grade-fair{ background: linear-gradient(135deg,#f59e0b 0%,#d97706 100%); }
+    .grade-poor{ background: linear-gradient(135deg,#ef4444 0%,#dc2626 100%); }
 
-    .input-field { transition: all 0.3s ease; }
-    .input-field:focus {
+    .input-field{ transition: all .3s ease; }
+    .input-field:focus{
       outline: none;
-      box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2);
+      box-shadow: 0 0 0 4px rgba(59,130,246,.2);
       transform: scale(1.02);
     }
 
-    .search-button { transition: all 0.3s ease; position: relative; overflow: hidden; }
-    .search-button:before {
-      content: '';
-      position: absolute; top: 50%; left: 50%;
-      width: 0; height: 0; border-radius: 50%;
-      background: rgba(255, 255, 255, 0.3);
-      transform: translate(-50%, -50%);
-      transition: width 0.6s, height 0.6s;
+    .search-button{ transition: all .3s ease; position: relative; overflow: hidden; }
+    .search-button:before{
+      content:'';
+      position:absolute; top:50%; left:50%;
+      width:0; height:0; border-radius:50%;
+      background: rgba(255,255,255,.3);
+      transform: translate(-50%,-50%);
+      transition: width .6s, height .6s;
     }
-    .search-button:hover:before { width: 300px; height: 300px; }
-    .search-button:hover {
+    .search-button:hover:before{ width:300px; height:300px; }
+    .search-button:hover{
       transform: translateY(-2px);
-      box-shadow: 0 8px 20px rgba(59, 130, 246, 0.4);
+      box-shadow: 0 8px 20px rgba(59,130,246,.4);
     }
-    .search-button:active { transform: translateY(0); }
+    .search-button:active{ transform: translateY(0); }
 
-    .math-icon { display: inline-block; animation: float 3s ease-in-out infinite; }
-    @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-10px); } }
-
-    .result-enter { animation: slideIn 0.5s ease-out; }
-    @keyframes slideIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
+    .math-icon{ display:inline-block; animation: float 3s ease-in-out infinite; }
+    @keyframes float{
+      0%,100%{ transform: translateY(0); }
+      50%{ transform: translateY(-10px); }
     }
 
-    /* ✅ เพิ่ม: บังคับสีตัวอักษรของ "คิดเป็น xx%" ให้เห็นชัดทุกพื้นหลัง */
-    .percentage-text {
+    .result-enter{ animation: slideIn .5s ease-out; }
+    @keyframes slideIn{
+      from{ opacity:0; transform: translateY(20px); }
+      to{ opacity:1; transform: translateY(0); }
+    }
+
+    /* ✅ ให้ร้อยละเห็นชัดทุกพื้นหลัง */
+    .percentage-text{
       background: rgba(255,255,255,0.92) !important;
-      color: #0f172a !important;            /* slate-900 */
-      text-shadow: none !important;
+      color: #0f172a !important; /* slate-900 */
       border: 2px solid rgba(255,255,255,0.9) !important;
     }
   </style>
+
   <style>@view-transition { navigation: auto; }</style>
-  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
 </head>
 
 <body class="h-full">
@@ -95,6 +100,7 @@
       button_text: 'ดูคะแนนของฉัน ✨'
     };
 
+    // ✅ อัปเดตข้อมูลตามที่ส่งมา (22 คน)
     const studentData = {
       '21391_305MEP68': { studentId:'21391', classCode:'305MEP68', name:'เด็กชายภาคิน เพิ่มพูล', grade:'ป.3/5', mathScore:17, fullScore:20 },
       '22916_305MEP68': { studentId:'22916', classCode:'305MEP68', name:'เด็กชายนัฐภาค ศรีจินดา', grade:'ป.3/5', mathScore:8, fullScore:20 },
@@ -252,10 +258,10 @@
       const scoreCard = document.createElement('div');
       scoreCard.className = `score-card rounded-3xl p-8 text-white ${getGradeClass(parseFloat(percentage))}`;
 
-      // ✅ เปลี่ยนสีตัวอักษร "คิดเป็น xx%" ให้เห็นชัด (text-slate-900) และพื้นหลังขาวทึบ
       scoreCard.innerHTML = `
         <div class="text-center">
           <div class="subject-name font-semibold mb-6">📐 คณิตศาสตร์<br>บทที่ 9 การวัดความยาว 📏</div>
+
           <div class="flex items-baseline justify-center gap-3 mb-4">
             <div class="score-value font-bold text-6xl">${student.mathScore}</div>
             <div class="full-score opacity-90 text-3xl">/ ${student.fullScore}</div>
@@ -308,6 +314,7 @@
         <main class="w-full h-full overflow-auto math-pattern">
           <div class="min-h-full flex items-center justify-center p-6">
             <div class="w-full max-w-4xl">
+
               <header class="text-center mb-10">
                 <div class="math-icon text-6xl mb-4">🎯📐✏️</div>
                 <h1 id="main-title" class="font-bold mb-2">ระบบตรวจสอบคะแนนวิชาคณิตศาสตร์</h1>
@@ -317,6 +324,7 @@
 
               <div class="bg-white rounded-3xl shadow-2xl p-8 mb-8 border-4 border-blue-300">
                 <form id="search-form" class="max-w-lg mx-auto">
+
                   <div class="mb-6">
                     <label id="input-label-1" for="student-id" class="block font-semibold mb-2">
                       เลขประจำตัวนักเรียน (5 หลัก)
@@ -325,8 +333,10 @@
                       type="text"
                       id="student-id"
                       class="input-field w-full px-5 py-4 border-2 border-blue-300 rounded-xl"
-                      placeholder="เช่น 21391"
+                      placeholder="เช่น 99999"
                       maxlength="5"
+                      value="99999"
+                      inputmode="numeric"
                     >
                   </div>
 
@@ -339,6 +349,7 @@
                       id="class-code"
                       class="input-field w-full px-5 py-4 border-2 border-blue-300 rounded-xl"
                       placeholder="เช่น 305MEP68"
+                      value="305MEP68"
                     >
                   </div>
 
@@ -368,6 +379,7 @@
                   <p id="encouragement-message" class="text-lg font-medium">🌟 เก่งมาก! ทำได้ดีเลยนะคะ 🌟</p>
                 </div>
               </div>
+
             </div>
           </div>
         </main>
