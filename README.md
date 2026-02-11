@@ -1,436 +1,454 @@
 <html lang="th" class="h-full">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ระบบตรวจสอบคะแนนนักเรียน</title>
-
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ระบบประกาศคะแนนสอบ</title>
   <script src="/_sdk/element_sdk.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
-
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstapi.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Mitr:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
   <style>
-    body { box-sizing: border-box; }
-    @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;600;700&display=swap');
-    * { font-family: 'Sarabun', sans-serif; }
-
-    .math-pattern{
-      background-image:
-        linear-gradient(45deg, rgba(59,130,246,.05) 25%, transparent 25%),
-        linear-gradient(-45deg, rgba(96,165,250,.05) 25%, transparent 25%),
-        linear-gradient(45deg, transparent 75%, rgba(59,130,246,.05) 75%),
-        linear-gradient(-45deg, transparent 75%, rgba(96,165,250,.05) 75%);
-      background-size: 60px 60px;
-      background-position: 0 0, 0 30px, 30px -30px, -30px 0px;
-    }
-
-    .score-card{ transition: transform .3s ease, box-shadow .3s ease; }
-    .score-card:hover{
-      transform: translateY(-4px) rotate(1deg);
-      box-shadow: 0 12px 24px rgba(0,0,0,.15);
-    }
-
-    .grade-excellent{ background: linear-gradient(135deg,#10b981 0%,#059669 100%); }
-    .grade-good{ background: linear-gradient(135deg,#3b82f6 0%,#2563eb 100%); }
-    .grade-fair{ background: linear-gradient(135deg,#f59e0b 0%,#d97706 100%); }
-    .grade-poor{ background: linear-gradient(135deg,#ef4444 0%,#dc2626 100%); }
-
-    .input-field{ transition: all .3s ease; }
-    .input-field:focus{
-      outline: none;
-      box-shadow: 0 0 0 4px rgba(59,130,246,.2);
-      transform: scale(1.02);
-    }
-
-    .search-button{ transition: all .3s ease; position: relative; overflow: hidden; }
-    .search-button:before{
-      content:'';
-      position:absolute; top:50%; left:50%;
-      width:0; height:0; border-radius:50%;
-      background: rgba(255,255,255,.3);
-      transform: translate(-50%,-50%);
-      transition: width .6s, height .6s;
-    }
-    .search-button:hover:before{ width:300px; height:300px; }
-    .search-button:hover{
-      transform: translateY(-2px);
-      box-shadow: 0 8px 20px rgba(59,130,246,.4);
-    }
-    .search-button:active{ transform: translateY(0); }
-
-    .math-icon{ display:inline-block; animation: float 3s ease-in-out infinite; }
-    @keyframes float{
-      0%,100%{ transform: translateY(0); }
-      50%{ transform: translateY(-10px); }
-    }
-
-    .result-enter{ animation: slideIn .5s ease-out; }
-    @keyframes slideIn{
-      from{ opacity:0; transform: translateY(20px); }
-      to{ opacity:1; transform: translateY(0); }
-    }
-
-    /* ✅ ให้ร้อยละเห็นชัดทุกพื้นหลัง */
-    .percentage-text{
-      background: rgba(255,255,255,0.92) !important;
-      color: #0f172a !important; /* slate-900 */
-      border: 2px solid rgba(255,255,255,0.9) !important;
+    body {
+      box-sizing: border-box;
+      font-family: 'Mitr', sans-serif;
     }
   </style>
-
   <style>@view-transition { navigation: auto; }</style>
-</head>
-
-<body class="h-full">
-  <div id="app" class="w-full h-full"></div>
-
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full">
+  <div id="app" class="h-full w-full"></div>
   <script>
+    const PASSWORD = "305MEP68";
+    const MAX_SCORE = 20;
+    
     const defaultConfig = {
-      background_color: '#dbeafe',
-      surface_color: '#ffffff',
-      text_color: '#1e40af',
-      primary_action_color: '#3b82f6',
-      secondary_action_color: '#60a5fa',
-      font_family: 'Sarabun',
-      font_size: 16,
-      app_title: 'ระบบตรวจสอบคะแนนวิชาคณิตศาสตร์',
-      subtitle: 'ชั้นประถมศึกษาปีที่ 3/5 (MEP)',
-      teacher_info: 'ครูผู้สอน นางวิรัลพัชษ์ สว่างเดือน',
-      input_label_1: 'เลขประจำตัวนักเรียน (5 หลัก)',
-      input_label_2: 'รหัสห้องเรียน',
-      button_text: 'ดูคะแนนของฉัน ✨'
+      school_name: "โรงเรียนประตูชัย",
+      class_name: "ชั้นประถมศึกษาปีที่ 3/5",
+      subject_name: "สาย MEP (Mini English Program)",
+      teacher_name: "นางวิรัลพัชษ์ สว่างเดือน",
+      background_color: "#fdf4ff",
+      card_color: "#ffffff",
+      primary_color: "#a855f7",
+      text_color: "#581c87",
+      accent_color: "#ec4899",
+      font_family: "Mitr",
+      font_size: 16
     };
 
-    // ✅ อัปเดตข้อมูลตามที่ส่งมา (22 คน)
-    const studentData = {
-      '21391_305MEP68': { studentId:'21391', classCode:'305MEP68', name:'เด็กชายภาคิน เพิ่มพูล', grade:'ป.3/5', mathScore:17, fullScore:20 },
-      '22916_305MEP68': { studentId:'22916', classCode:'305MEP68', name:'เด็กชายนัฐภาค ศรีจินดา', grade:'ป.3/5', mathScore:8, fullScore:20 },
-      '22917_305MEP68': { studentId:'22917', classCode:'305MEP68', name:'เด็กชายธนาธิป ใจสวย', grade:'ป.3/5', mathScore:18, fullScore:20 },
-      '22918_305MEP68': { studentId:'22918', classCode:'305MEP68', name:'เด็กชายศุภณัฐ พันธ์สถิตย์', grade:'ป.3/5', mathScore:9, fullScore:20 },
-      '22919_305MEP68': { studentId:'22919', classCode:'305MEP68', name:'เด็กชายวีต์ภัฐนนท์ เรืองวงษ์งาม', grade:'ป.3/5', mathScore:16, fullScore:20 },
-      '22920_305MEP68': { studentId:'22920', classCode:'305MEP68', name:'เด็กชายจิตติพัฒน์ นาคปัต', grade:'ป.3/5', mathScore:17, fullScore:20 },
-      '22922_305MEP68': { studentId:'22922', classCode:'305MEP68', name:'เด็กชายชิติพัทธ์ พระเทศ', grade:'ป.3/5', mathScore:15, fullScore:20 },
-      '23086_305MEP68': { studentId:'23086', classCode:'305MEP68', name:'เด็กชายวิพุธ อินทร์แก้ว', grade:'ป.3/5', mathScore:5, fullScore:20 },
-      '23391_305MEP68': { studentId:'23391', classCode:'305MEP68', name:'เด็กชายณัฐธัญ สีดี', grade:'ป.3/5', mathScore:7, fullScore:20 },
-      '21431_305MEP68': { studentId:'21431', classCode:'305MEP68', name:'เด็กหญิงวรรณวิสา อินรองพล', grade:'ป.3/5', mathScore:6, fullScore:20 },
-      '21932_305MEP68': { studentId:'21932', classCode:'305MEP68', name:'เด็กหญิงนรสิตา อำนวย', grade:'ป.3/5', mathScore:9, fullScore:20 },
-      '22925_305MEP68': { studentId:'22925', classCode:'305MEP68', name:'เด็กหญิงวรนิษฐ์ พงษ์จำปา', grade:'ป.3/5', mathScore:13, fullScore:20 },
-      '22926_305MEP68': { studentId:'22926', classCode:'305MEP68', name:'เด็กหญิงศิขรินทร์ สุขสด', grade:'ป.3/5', mathScore:10, fullScore:20 },
-      '22927_305MEP68': { studentId:'22927', classCode:'305MEP68', name:'เด็กหญิงภิญญดา ตั้งคุณธรรม', grade:'ป.3/5', mathScore:14, fullScore:20 },
-      '22928_305MEP68': { studentId:'22928', classCode:'305MEP68', name:'เด็กหญิงณัฏฐณิชา จุลชีพ', grade:'ป.3/5', mathScore:15, fullScore:20 },
-      '22929_305MEP68': { studentId:'22929', classCode:'305MEP68', name:'เด็กหญิงณิชาภัทร บุปผา', grade:'ป.3/5', mathScore:9, fullScore:20 },
-      '22930_305MEP68': { studentId:'22930', classCode:'305MEP68', name:'เด็กหญิงนภัสวรรณ ขาวโต', grade:'ป.3/5', mathScore:10, fullScore:20 },
-      '22931_305MEP68': { studentId:'22931', classCode:'305MEP68', name:'เด็กหญิงนิภาธร แจ้งในเมือง', grade:'ป.3/5', mathScore:5, fullScore:20 },
-      '22932_305MEP68': { studentId:'22932', classCode:'305MEP68', name:'เด็กหญิงธนัชชา พุฒิพรธนกุล', grade:'ป.3/5', mathScore:15, fullScore:20 },
-      '22933_305MEP68': { studentId:'22933', classCode:'305MEP68', name:'เด็กหญิงวนิดา ศรีม่วง', grade:'ป.3/5', mathScore:6, fullScore:20 },
-      '22934_305MEP68': { studentId:'22934', classCode:'305MEP68', name:'เด็กหญิงพรหมเทพ ลักษวุธ', grade:'ป.3/5', mathScore:3, fullScore:20 },
-      '22935_305MEP68': { studentId:'22935', classCode:'305MEP68', name:'เด็กหญิงธันชนก ปุณณินท์', grade:'ป.3/5', mathScore:11, fullScore:20 }
+    // ข้อมูลนักเรียนทั้งหมด
+    const studentsData = {
+      "21391": { name: "เด็กชายภาคิน เพิ่มพูล", lesson1: 17, lesson2: 14, lesson3: 17 },
+      "22916": { name: "เด็กชายนัฐภาค ศรีจินดา", lesson1: 8, lesson2: 8, lesson3: 11 },
+      "22917": { name: "เด็กชายธนาธิป ใจสวย", lesson1: 18, lesson2: 16, lesson3: 15 },
+      "22918": { name: "เด็กชายศุภณัฐ พันธ์สถิตย์", lesson1: 9, lesson2: 8, lesson3: 3 },
+      "22919": { name: "เด็กชายวีต์ภัฐนนท์ เรืองวงษ์งาม", lesson1: 16, lesson2: 13, lesson3: 13 },
+      "22920": { name: "เด็กชายจิตติพัฒน์ นาคปัต", lesson1: 17, lesson2: 19, lesson3: 18 },
+      "22922": { name: "เด็กชายชิติพัทธ์ พระเทศ", lesson1: 15, lesson2: 8, lesson3: 7 },
+      "23086": { name: "เด็กชายวิพุธ อินทร์แก้ว", lesson1: 5, lesson2: 2, lesson3: 3 },
+      "23391": { name: "เด็กชายณัฐธัญ สีดี", lesson1: 7, lesson2: 4, lesson3: 8 },
+      "21431": { name: "เด็กหญิงวรรณวิสา อินรองพล", lesson1: 6, lesson2: 6, lesson3: 5 },
+      "21932": { name: "เด็กหญิงนรสิตา อำนวย", lesson1: 9, lesson2: 3, lesson3: 4 },
+      "22925": { name: "เด็กหญิงวรนิษฐ์ พงษ์จำปา", lesson1: 13, lesson2: 15, lesson3: 14 },
+      "22926": { name: "เด็กหญิงศิขรินทร์ สุขสด", lesson1: 10, lesson2: 7, lesson3: 16 },
+      "22927": { name: "เด็กหญิงภิญญดา ตั้งคุณธรรม", lesson1: 14, lesson2: 9, lesson3: 9 },
+      "22928": { name: "เด็กหญิงณัฏฐณิชา จุลชีพ", lesson1: 15, lesson2: 10, lesson3: 13 },
+      "22929": { name: "เด็กหญิงณิชาภัทร บุปผา", lesson1: 9, lesson2: 5, lesson3: 4 },
+      "22930": { name: "เด็กหญิงนภัสวรรณ ขาวโต", lesson1: 10, lesson2: 7, lesson3: 7 },
+      "22931": { name: "เด็กหญิงนิภาธร แจ้งในเมือง", lesson1: 5, lesson2: 5, lesson3: 6 },
+      "22932": { name: "เด็กหญิงธนัชชา พุฒิพรธนกุล", lesson1: 15, lesson2: 16, lesson3: 18 },
+      "22933": { name: "เด็กหญิงวนิดา ศรีม่วง", lesson1: 6, lesson2: 7, lesson3: 6 },
+      "22934": { name: "เด็กหญิงพรหมเทพ ลักษวุธ", lesson1: 3, lesson2: 3, lesson3: 3 },
+      "22935": { name: "เด็กหญิงธันชนก ปุณณินท์", lesson1: 11, lesson2: 8, lesson3: 11 }
     };
 
-    function getGradeClass(percentage) {
-      if (percentage >= 80) return 'grade-excellent';
-      if (percentage >= 70) return 'grade-good';
-      if (percentage >= 60) return 'grade-fair';
-      return 'grade-poor';
+    let currentStudentId = null;
+
+    async function initApp() {
+      if (window.elementSdk) {
+        window.elementSdk.init({
+          defaultConfig,
+          onConfigChange: async (config) => {
+            applyConfig(config);
+            if (currentStudentId) {
+              renderScoresPage();
+            } else {
+              renderLoginPage();
+            }
+          },
+          mapToCapabilities: (config) => ({
+            recolorables: [
+              {
+                get: () => config.background_color || defaultConfig.background_color,
+                set: (value) => {
+                  config.background_color = value;
+                  window.elementSdk.setConfig({ background_color: value });
+                }
+              },
+              {
+                get: () => config.card_color || defaultConfig.card_color,
+                set: (value) => {
+                  config.card_color = value;
+                  window.elementSdk.setConfig({ card_color: value });
+                }
+              },
+              {
+                get: () => config.text_color || defaultConfig.text_color,
+                set: (value) => {
+                  config.text_color = value;
+                  window.elementSdk.setConfig({ text_color: value });
+                }
+              },
+              {
+                get: () => config.primary_color || defaultConfig.primary_color,
+                set: (value) => {
+                  config.primary_color = value;
+                  window.elementSdk.setConfig({ primary_color: value });
+                }
+              },
+              {
+                get: () => config.accent_color || defaultConfig.accent_color,
+                set: (value) => {
+                  config.accent_color = value;
+                  window.elementSdk.setConfig({ accent_color: value });
+                }
+              }
+            ],
+            borderables: [],
+            fontEditable: {
+              get: () => config.font_family || defaultConfig.font_family,
+              set: (value) => {
+                config.font_family = value;
+                window.elementSdk.setConfig({ font_family: value });
+              }
+            },
+            fontSizeable: {
+              get: () => config.font_size || defaultConfig.font_size,
+              set: (value) => {
+                config.font_size = value;
+                window.elementSdk.setConfig({ font_size: value });
+              }
+            }
+          }),
+          mapToEditPanelValues: (config) => new Map([
+            ["school_name", config.school_name || defaultConfig.school_name],
+            ["class_name", config.class_name || defaultConfig.class_name],
+            ["subject_name", config.subject_name || defaultConfig.subject_name],
+            ["teacher_name", config.teacher_name || defaultConfig.teacher_name]
+          ])
+        });
+      }
+
+      renderLoginPage();
     }
 
-    function calculatePercentage(score, fullScore) {
-      if (!fullScore || fullScore <= 0) return '0.00';
-      return ((score / fullScore) * 100).toFixed(2);
-    }
-
-    function getEncouragementMessage(percentage) {
-      const percent = parseFloat(percentage);
-      if (percent >= 70) return '🌟 เก่งมาก! ทำได้ดีเลยนะคะ 🌟';
-      if (percent >= 60) return '👏 ทำได้ดีมาก ใกล้เป้าหมายแล้วนะคะ 👏';
-      if (percent >= 50) return '💪 เริ่มต้นได้ดี อย่าท้อนะคะ ความเก่งกำลังมา 💪';
-      if (percent >= 30) return '📚 ค่อยๆ ฝึกนะคะ เดี๋ยวจะขึ้นค่ะ 📚';
-      if (percent >= 15) return '✏️ เริ่มใหม่ได้เสมอ ฝึกทำโจทย์เยอะๆ นะคะ ✏️';
-      return '💖 ฝึกทำโจทย์เยอะๆ นะคะ และตั้งใจให้มากขึ้นนะคะ 💖';
-    }
-
-    async function onConfigChange(config) {
-      config = config || defaultConfig;
-
-      const baseSize = config.font_size || defaultConfig.font_size;
-      const customFont = config.font_family || defaultConfig.font_family;
-      const fontStack = `${customFont}, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif`;
-
-      const backgroundColor = config.background_color || defaultConfig.background_color;
-      const surfaceColor = config.surface_color || defaultConfig.surface_color;
-      const textColor = config.text_color || defaultConfig.text_color;
-      const primaryColor = config.primary_action_color || defaultConfig.primary_action_color;
-      const secondaryColor = config.secondary_action_color || defaultConfig.secondary_action_color;
-
-      const appTitle = config.app_title || defaultConfig.app_title;
-      const subtitle = config.subtitle || defaultConfig.subtitle;
-      const teacherInfo = config.teacher_info || defaultConfig.teacher_info;
-      const inputLabel1 = config.input_label_1 || defaultConfig.input_label_1;
-      const inputLabel2 = config.input_label_2 || defaultConfig.input_label_2;
-      const buttonText = config.button_text || defaultConfig.button_text;
-
+    function applyConfig(config) {
       const app = document.getElementById('app');
-      app.style.backgroundColor = backgroundColor;
-      app.style.fontFamily = fontStack;
-      app.style.color = textColor;
-
-      const titleElement = document.getElementById('main-title');
-      if (titleElement) {
-        titleElement.textContent = appTitle;
-        titleElement.style.fontSize = `${baseSize * 1.875}px`;
-        titleElement.style.fontFamily = fontStack;
-        titleElement.style.color = textColor;
-      }
-
-      const subtitleElement = document.getElementById('main-subtitle');
-      if (subtitleElement) {
-        subtitleElement.textContent = subtitle;
-        subtitleElement.style.fontSize = `${baseSize * 1.25}px`;
-        subtitleElement.style.fontFamily = fontStack;
-        subtitleElement.style.color = textColor;
-      }
-
-      const teacherElement = document.getElementById('teacher-info');
-      if (teacherElement) {
-        teacherElement.textContent = teacherInfo;
-        teacherElement.style.fontSize = `${baseSize}px`;
-        teacherElement.style.fontFamily = fontStack;
-        teacherElement.style.color = textColor;
-      }
-
-      const label1Element = document.getElementById('input-label-1');
-      if (label1Element) {
-        label1Element.textContent = inputLabel1;
-        label1Element.style.fontSize = `${baseSize * 0.875}px`;
-        label1Element.style.fontFamily = fontStack;
-        label1Element.style.color = textColor;
-      }
-
-      const label2Element = document.getElementById('input-label-2');
-      if (label2Element) {
-        label2Element.textContent = inputLabel2;
-        label2Element.style.fontSize = `${baseSize * 0.875}px`;
-        label2Element.style.fontFamily = fontStack;
-        label2Element.style.color = textColor;
-      }
-
-      const input1Element = document.getElementById('student-id');
-      if (input1Element) {
-        input1Element.style.fontSize = `${baseSize}px`;
-        input1Element.style.fontFamily = fontStack;
-        input1Element.style.color = textColor;
-        input1Element.style.backgroundColor = surfaceColor;
-        input1Element.style.borderColor = secondaryColor;
-      }
-
-      const input2Element = document.getElementById('class-code');
-      if (input2Element) {
-        input2Element.style.fontSize = `${baseSize}px`;
-        input2Element.style.fontFamily = fontStack;
-        input2Element.style.color = textColor;
-        input2Element.style.backgroundColor = surfaceColor;
-        input2Element.style.borderColor = secondaryColor;
-      }
-
-      const buttonElement = document.getElementById('search-button');
-      if (buttonElement) {
-        buttonElement.textContent = buttonText;
-        buttonElement.style.backgroundColor = primaryColor;
-        buttonElement.style.fontSize = `${baseSize * 1.125}px`;
-        buttonElement.style.fontFamily = fontStack;
-      }
+      const customFont = config.font_family || defaultConfig.font_family;
+      const baseSize = config.font_size || defaultConfig.font_size;
+      const bgColor = config.background_color || defaultConfig.background_color;
+      
+      app.style.background = bgColor;
+      app.style.fontFamily = `${customFont}, sans-serif`;
+      app.style.fontSize = `${baseSize}px`;
+      
+      document.documentElement.style.setProperty('--card-color', config.card_color || defaultConfig.card_color);
+      document.documentElement.style.setProperty('--text-color', config.text_color || defaultConfig.text_color);
+      document.documentElement.style.setProperty('--primary-color', config.primary_color || defaultConfig.primary_color);
+      document.documentElement.style.setProperty('--accent-color', config.accent_color || defaultConfig.accent_color);
     }
 
-    function showError(message) {
-      const errorDiv = document.getElementById('error-message');
-      errorDiv.textContent = message;
-      errorDiv.classList.remove('hidden');
-    }
+    function renderLoginPage() {
+      const config = window.elementSdk?.config || defaultConfig;
+      const app = document.getElementById('app');
+      const customFont = config.font_family || defaultConfig.font_family;
+      const baseSize = config.font_size || defaultConfig.font_size;
+      const cardColor = config.card_color || defaultConfig.card_color;
+      const textColor = config.text_color || defaultConfig.text_color;
+      const primaryColor = config.primary_color || defaultConfig.primary_color;
+      const schoolName = config.school_name || defaultConfig.school_name;
+      const className = config.class_name || defaultConfig.class_name;
+      const subjectName = config.subject_name || defaultConfig.subject_name;
+      const teacherName = config.teacher_name || defaultConfig.teacher_name;
 
-    function displayResults(student) {
-      const percentage = calculatePercentage(student.mathScore, student.fullScore);
+      app.innerHTML = `
+        <div class="h-full w-full flex items-center justify-center p-6" style="background: linear-gradient(135deg, #fdf4ff 0%, #fce7f3 50%, #dbeafe 100%); overflow-y: auto;">
+          <div class="w-full max-w-md" style="background: ${cardColor}; border-radius: 24px; box-shadow: 0 12px 40px rgba(168, 85, 247, 0.25); padding: 48px; border: 3px solid rgba(236, 72, 153, 0.2);">
+            <div style="text-align: center; margin-bottom: 32px;">
+              <div style="font-size: ${baseSize * 1.76}px; font-weight: 700; background: linear-gradient(135deg, #a855f7 0%, #ec4899 50%, #60a5fa 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 12px; font-family: ${customFont}, sans-serif; line-height: 1.3;">
+                🌟 ระบบประกาศคะแนนสอบ
+              </div>
+              <div style="font-size: ${baseSize * 1.76}px; font-weight: 700; background: linear-gradient(135deg, #a855f7 0%, #ec4899 50%, #60a5fa 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 16px; font-family: ${customFont}, sans-serif; line-height: 1.3;">
+                วิชา คณิตศาสตร์
+              </div>
+              <div style="font-size: ${baseSize * 1.1}px; font-weight: 600; color: ${textColor}; margin-bottom: 8px; font-family: ${customFont}, sans-serif;">
+                ${schoolName}
+              </div>
+              <div style="font-size: ${baseSize * 0.95}px; color: ${textColor}; opacity: 0.8; margin-bottom: 6px; font-family: ${customFont}, sans-serif;">
+                ${className}
+              </div>
+              <div style="font-size: ${baseSize * 0.9}px; color: ${textColor}; opacity: 0.7; margin-bottom: 8px; font-family: ${customFont}, sans-serif;">
+                ${subjectName}
+              </div>
+              <div style="font-size: ${baseSize * 0.95}px; font-weight: 700; color: ${textColor}; opacity: 0.85; font-family: ${customFont}, sans-serif;">
+                ครูผู้สอน ${teacherName}
+              </div>
+            </div>
 
-      document.getElementById('student-name').textContent = student.name;
-      document.getElementById('student-grade').textContent = `ชั้น ${student.grade} 🎓`;
+            <div style="margin-bottom: 24px; padding: 20px; background: linear-gradient(135deg, #eff6ff 0%, #f0f9ff 100%); border-radius: 16px; border: 2px solid #bfdbfe;">
+              <div style="font-size: ${baseSize * 1.05}px; font-weight: 700; color: #1e40af; margin-bottom: 12px; font-family: ${customFont}, sans-serif; display: flex; align-items: center; gap: 8px;">
+                <span style="font-size: ${baseSize * 1.3}px;">ℹ️</span>
+                คำแนะนำการเข้าใช้งาน
+              </div>
+              <div style="font-size: ${baseSize * 0.85}px; color: #1e3a8a; line-height: 1.8; font-family: ${customFont}, sans-serif;">
+                <div style="margin-bottom: 8px;">
+                  <span style="font-weight: 600;">📌 เลขประจำตัวนักเรียน:</span> กรอก 5 หลัก เช่น 21391
+                </div>
+                <div style="margin-bottom: 8px;">
+                  <span style="font-weight: 600;">🔐 รหัสผ่าน:</span> 305MEP68
+                </div>
+                <div style="margin-top: 12px; padding: 10px; background: white; border-radius: 8px; border-left: 3px solid #3b82f6;">
+                  <span style="font-weight: 600;">💡 เคล็ดลับ:</span> หากเข้าสู่ระบบไม่ได้ ให้ตรวจสอบว่ากรอกเลขประจำตัว 5 หลักถูกต้อง และใช้รหัสผ่านที่ครูแจ้ง
+                </div>
+              </div>
+            </div>
 
-      const scoresContainer = document.getElementById('scores-container');
-      scoresContainer.innerHTML = '';
+            <form id="loginForm" style="display: flex; flex-direction: column; gap: 20px;">
+              <div>
+                <label for="studentId" style="display: block; font-size: ${baseSize * 0.9}px; font-weight: 600; color: ${textColor}; margin-bottom: 8px; font-family: ${customFont}, sans-serif;">
+                  เลขประจำตัวนักเรียน (5 หลัก)
+                </label>
+                <input 
+                  type="text" 
+                  id="studentId" 
+                  maxlength="5"
+                  pattern="[0-9]{5}"
+                  required
+                  style="width: 100%; padding: 14px 18px; border: 2px solid #e9d5ff; border-radius: 12px; font-size: ${baseSize}px; color: ${textColor}; font-family: ${customFont}, sans-serif; box-sizing: border-box; transition: all 0.3s;"
+                  placeholder="xxxxx"
+                  onfocus="this.style.borderColor='${primaryColor}'; this.style.boxShadow='0 0 0 3px rgba(168, 85, 247, 0.1)'"
+                  onblur="this.style.borderColor='#e9d5ff'; this.style.boxShadow='none'"
+                >
+              </div>
 
-      const scoreCard = document.createElement('div');
-      scoreCard.className = `score-card rounded-3xl p-8 text-white ${getGradeClass(parseFloat(percentage))}`;
+              <div>
+                <label for="password" style="display: block; font-size: ${baseSize * 0.9}px; font-weight: 600; color: ${textColor}; margin-bottom: 8px; font-family: ${customFont}, sans-serif;">
+                  รหัสผ่าน
+                </label>
+                <input 
+                  type="password" 
+                  id="password" 
+                  required
+                  style="width: 100%; padding: 14px 18px; border: 2px solid #e9d5ff; border-radius: 12px; font-size: ${baseSize}px; color: ${textColor}; font-family: ${customFont}, sans-serif; box-sizing: border-box; transition: all 0.3s;"
+                  placeholder="กรอกรหัสผ่าน"
+                  onfocus="this.style.borderColor='${primaryColor}'; this.style.boxShadow='0 0 0 3px rgba(168, 85, 247, 0.1)'"
+                  onblur="this.style.borderColor='#e9d5ff'; this.style.boxShadow='none'"
+                >
+              </div>
 
-      scoreCard.innerHTML = `
-        <div class="text-center">
-          <div class="subject-name font-semibold mb-6">📐 คณิตศาสตร์<br>บทที่ 9 การวัดความยาว 📏</div>
+              <div id="errorMessage" style="display: none; padding: 14px; background: linear-gradient(135deg, #fee2e2 0%, #fce7f3 100%); border-radius: 12px; color: #dc2626; font-size: ${baseSize * 0.9}px; font-family: ${customFont}, sans-serif; border: 2px solid #fca5a5;"></div>
 
-          <div class="flex items-baseline justify-center gap-3 mb-4">
-            <div class="score-value font-bold text-6xl">${student.mathScore}</div>
-            <div class="full-score opacity-90 text-3xl">/ ${student.fullScore}</div>
-          </div>
-
-          <div class="percentage-text font-semibold rounded-full px-6 py-2 inline-block">
-            คิดเป็น ${percentage}%
+              <button 
+                type="submit"
+                style="width: 100%; padding: 16px; background: linear-gradient(135deg, ${primaryColor} 0%, #ec4899 100%); color: white; border: none; border-radius: 12px; font-size: ${baseSize * 1.1}px; font-weight: 600; cursor: pointer; transition: all 0.3s; font-family: ${customFont}, sans-serif; box-shadow: 0 4px 16px rgba(168, 85, 247, 0.3);"
+                onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 24px rgba(168, 85, 247, 0.4)'"
+                onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 16px rgba(168, 85, 247, 0.3)'"
+              >
+                ✨ เข้าสู่ระบบ
+              </button>
+            </form>
           </div>
         </div>
       `;
-      scoresContainer.appendChild(scoreCard);
 
-      const encouragementElement = document.getElementById('encouragement-message');
-      if (encouragementElement) {
-        encouragementElement.textContent = getEncouragementMessage(percentage);
+      document.getElementById('loginForm').addEventListener('submit', handleLogin);
+    }
+
+    function handleLogin(e) {
+      e.preventDefault();
+      const studentId = document.getElementById('studentId').value;
+      const password = document.getElementById('password').value;
+      const errorDiv = document.getElementById('errorMessage');
+
+      if (studentId.length !== 5 || !/^\d{5}$/.test(studentId)) {
+        errorDiv.textContent = "❌ กรุณากรอกเลขประจำตัวนักเรียน 5 หลักให้ถูกต้อง";
+        errorDiv.style.display = 'block';
+        return;
       }
 
-      const resultDiv = document.getElementById('result');
-      resultDiv.classList.remove('hidden');
-      resultDiv.classList.add('result-enter');
+      if (password !== PASSWORD) {
+        errorDiv.textContent = "❌ รหัสผ่านไม่ถูกต้อง";
+        errorDiv.style.display = 'block';
+        return;
+      }
 
-      onConfigChange(window.elementSdk ? window.elementSdk.config : defaultConfig);
+      if (!studentsData[studentId]) {
+        errorDiv.textContent = "❌ ไม่พบข้อมูลนักเรียนในระบบ";
+        errorDiv.style.display = 'block';
+        return;
+      }
+
+      currentStudentId = studentId;
+      renderScoresPage();
     }
 
-    function searchStudent() {
-      const studentId = document.getElementById('student-id').value.trim();
-      const classCode = document.getElementById('class-code').value.trim();
-      const resultDiv = document.getElementById('result');
-      const errorDiv = document.getElementById('error-message');
-
-      errorDiv.classList.add('hidden');
-      resultDiv.classList.add('hidden');
-
-      if (!studentId) return showError('กรุณากรอกเลขประจำตัวนักเรียน 📝');
-      if (studentId.length !== 5) return showError('เลขประจำตัวนักเรียนต้องเป็น 5 หลักเท่านั้น 🔢');
-      if (!classCode) return showError('กรุณากรอกรหัสห้องเรียน 📝');
-
-      const searchKey = `${studentId}_${classCode}`;
-      const student = studentData[searchKey];
-
-      if (!student) return showError('❌ ไม่พบข้อมูล กรุณาตรวจสอบเลขประจำตัวและรหัสห้องเรียนอีกครั้ง');
-
-      displayResults(student);
-    }
-
-    function init() {
+    function renderScoresPage() {
+      const config = window.elementSdk?.config || defaultConfig;
       const app = document.getElementById('app');
+      const customFont = config.font_family || defaultConfig.font_family;
+      const baseSize = config.font_size || defaultConfig.font_size;
+      const cardColor = config.card_color || defaultConfig.card_color;
+      const textColor = config.text_color || defaultConfig.text_color;
+      const primaryColor = config.primary_color || defaultConfig.primary_color;
+      const accentColor = config.accent_color || defaultConfig.accent_color;
+      const schoolName = config.school_name || defaultConfig.school_name;
+      const className = config.class_name || defaultConfig.class_name;
+      const subjectName = config.subject_name || defaultConfig.subject_name;
+      const teacherName = config.teacher_name || defaultConfig.teacher_name;
+
+      const studentData = studentsData[currentStudentId];
+      const lessons = [
+        { number: 1, name: "บทที่ 9: การวัดน้ำหนัก", icon: "⚖️", score: studentData.lesson1 },
+        { number: 2, name: "บทที่ 10: การวัดปริมาตร", icon: "📦", score: studentData.lesson2 },
+        { number: 3, name: "บทที่ 11: (หัวข้อเพิ่มเติม)", icon: "📚", score: studentData.lesson3 }
+      ];
 
       app.innerHTML = `
-        <main class="w-full h-full overflow-auto math-pattern">
-          <div class="min-h-full flex items-center justify-center p-6">
-            <div class="w-full max-w-4xl">
-
-              <header class="text-center mb-10">
-                <div class="math-icon text-6xl mb-4">🎯📐✏️</div>
-                <h1 id="main-title" class="font-bold mb-2">ระบบตรวจสอบคะแนนวิชาคณิตศาสตร์</h1>
-                <p id="main-subtitle" class="font-semibold mb-1">ชั้นประถมศึกษาปีที่ 3/5 (MEP)</p>
-                <p id="teacher-info" class="opacity-80">ครูผู้สอน นางวิรัลพัชษ์ สว่างเดือน</p>
-              </header>
-
-              <div class="bg-white rounded-3xl shadow-2xl p-8 mb-8 border-4 border-blue-300">
-                <form id="search-form" class="max-w-lg mx-auto">
-
-                  <div class="mb-6">
-                    <label id="input-label-1" for="student-id" class="block font-semibold mb-2">
-                      เลขประจำตัวนักเรียน (5 หลัก)
-                    </label>
-                    <input
-                      type="text"
-                      id="student-id"
-                      class="input-field w-full px-5 py-4 border-2 border-blue-300 rounded-xl"
-                      placeholder="เช่น 99999"
-                      maxlength="5"
-                      value="99999"
-                      inputmode="numeric"
-                    >
+        <div class="h-full w-full" style="background: linear-gradient(135deg, #fdf4ff 0%, #fce7f3 50%, #dbeafe 100%); overflow-y: auto;">
+          <div style="max-width: 900px; margin: 0 auto; padding: 32px 24px;">
+            <div style="background: ${cardColor}; border-radius: 24px; padding: 36px; box-shadow: 0 8px 32px rgba(168, 85, 247, 0.2); margin-bottom: 28px; border: 3px solid rgba(236, 72, 153, 0.15);">
+              <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; margin-bottom: 20px;">
+                <div>
+                  <div style="font-size: ${baseSize * 1.9}px; font-weight: 700; background: linear-gradient(135deg, #a855f7 0%, #ec4899 50%, #60a5fa 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 10px; font-family: ${customFont}, sans-serif;">
+                    💖 คะแนนสอบวิชาคณิตศาสตร์
                   </div>
-
-                  <div class="mb-6">
-                    <label id="input-label-2" for="class-code" class="block font-semibold mb-2">
-                      รหัสห้องเรียน
-                    </label>
-                    <input
-                      type="text"
-                      id="class-code"
-                      class="input-field w-full px-5 py-4 border-2 border-blue-300 rounded-xl"
-                      placeholder="เช่น 305MEP68"
-                      value="305MEP68"
-                    >
+                  <div style="font-size: ${baseSize * 1.05}px; font-weight: 600; color: ${textColor}; margin-bottom: 5px; font-family: ${customFont}, sans-serif;">
+                    ${schoolName}
                   </div>
+                  <div style="font-size: ${baseSize * 0.95}px; color: ${textColor}; opacity: 0.75; margin-bottom: 3px; font-family: ${customFont}, sans-serif;">
+                    ${className}
+                  </div>
+                  <div style="font-size: ${baseSize * 0.9}px; color: ${textColor}; opacity: 0.7; margin-bottom: 5px; font-family: ${customFont}, sans-serif;">
+                    ${subjectName}
+                  </div>
+                  <div style="font-size: ${baseSize * 0.95}px; font-weight: 700; color: ${textColor}; opacity: 0.85; font-family: ${customFont}, sans-serif;">
+                    ครูผู้สอน ${teacherName}
+                  </div>
+                </div>
+                <button 
+                  id="logoutBtn"
+                  style="padding: 12px 24px; background: white; color: ${primaryColor}; border: 2px solid ${primaryColor}; border-radius: 12px; font-size: ${baseSize * 0.9}px; font-weight: 600; cursor: pointer; font-family: ${customFont}, sans-serif; transition: all 0.3s;"
+                  onmouseover="this.style.background='linear-gradient(135deg, ${primaryColor} 0%, ${accentColor} 100%)'; this.style.color='white'; this.style.transform='scale(1.05)'"
+                  onmouseout="this.style.background='white'; this.style.color='${primaryColor}'; this.style.transform='scale(1)'"
+                >
+                  👋 ออกจากระบบ
+                </button>
+              </div>
+              <div style="padding: 20px; background: linear-gradient(135deg, ${primaryColor} 0%, ${accentColor} 50%, #60a5fa 100%); border-radius: 16px; box-shadow: 0 4px 16px rgba(168, 85, 247, 0.3); margin-bottom: 16px;">
+                <div style="font-size: ${baseSize * 0.9}px; color: white; opacity: 0.95; margin-bottom: 6px; font-family: ${customFont}, sans-serif;">
+                  ⭐ เลขประจำตัวนักเรียน
+                </div>
+                <div style="font-size: ${baseSize * 1.6}px; font-weight: 700; color: white; font-family: ${customFont}, sans-serif;">
+                  ${currentStudentId}
+                </div>
+              </div>
+              <div style="padding: 18px; background: linear-gradient(135deg, #fae8ff 0%, #e0e7ff 100%); border-radius: 16px; border: 2px solid rgba(168, 85, 247, 0.2);">
+                <div style="font-size: ${baseSize * 1.25}px; font-weight: 600; color: ${textColor}; font-family: ${customFont}, sans-serif;">
+                  👤 ${studentData.name}
+                </div>
+              </div>
+            </div>
 
-                  <button
-                    type="submit"
-                    id="search-button"
-                    class="search-button w-full px-8 py-4 text-white font-bold rounded-xl relative"
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px;">
+              ${lessons.map(lesson => {
+                const score = lesson.score;
+                const percentage = score !== null ? ((score / MAX_SCORE) * 100).toFixed(2) : null;
+                
+                return `
+                  <div 
+                    style="background: ${cardColor}; border-radius: 20px; padding: 28px; box-shadow: 0 6px 24px rgba(168, 85, 247, 0.15); transition: all 0.3s; border: 3px solid ${score !== null ? 'rgba(168, 85, 247, 0.3)' : 'rgba(220, 38, 38, 0.3)'};"
                   >
-                    ดูคะแนนของฉัน ✨
-                  </button>
-                </form>
-
-                <div id="error-message" class="hidden mt-6 p-5 bg-red-50 border-2 border-red-300 text-red-700 rounded-xl text-center font-medium"></div>
-              </div>
-
-              <div id="result" class="hidden">
-                <div id="result-card" class="rounded-3xl shadow-2xl p-8 mb-6 border-4 border-blue-300">
-                  <div class="text-center mb-8">
-                    <h2 id="student-name" class="font-bold mb-2">-</h2>
-                    <p id="student-grade" class="font-medium">-</p>
+                    <div style="font-size: ${baseSize * 1.1}px; font-weight: 700; color: ${textColor}; margin-bottom: 20px; font-family: ${customFont}, sans-serif; display: flex; align-items: center; gap: 8px;">
+                      <span style="font-size: ${baseSize * 1.5}px;">${lesson.icon}</span>
+                      ${lesson.name}
+                    </div>
+                    ${score !== null ? `
+                      <div style="display: flex; align-items: baseline; gap: 10px; margin-bottom: 12px;">
+                        <div style="font-size: ${baseSize * 2.8}px; font-weight: 700; background: linear-gradient(135deg, ${accentColor} 0%, ${primaryColor} 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; font-family: ${customFont}, sans-serif;">
+                          ${score}
+                        </div>
+                        <div style="font-size: ${baseSize * 1.3}px; color: ${textColor}; opacity: 0.6; font-family: ${customFont}, sans-serif;">
+                          / ${MAX_SCORE}
+                        </div>
+                      </div>
+                      <div style="padding: 12px 16px; background: linear-gradient(135deg, #fae8ff 0%, #e0e7ff 100%); border-radius: 12px; margin-bottom: 16px; border: 2px solid rgba(168, 85, 247, 0.2);">
+                        <div style="font-size: ${baseSize * 1.8}px; font-weight: 700; color: ${primaryColor}; font-family: ${customFont}, sans-serif; text-align: center;">
+                          ${percentage}%
+                        </div>
+                      </div>
+                      <div style="width: 100%; height: 12px; background: linear-gradient(90deg, #fae8ff 0%, #ddd6fe 100%); border-radius: 8px; overflow: hidden; box-shadow: inset 0 2px 4px rgba(0,0,0,0.1); margin-bottom: 16px;">
+                        <div style="height: 100%; background: linear-gradient(90deg, ${accentColor} 0%, ${primaryColor} 100%); width: ${percentage}%; transition: width 0.5s; box-shadow: 0 2px 8px rgba(236, 72, 153, 0.4);"></div>
+                      </div>
+                      ${(() => {
+                        const percent = parseFloat(percentage);
+                        let emoji = '';
+                        let title = '';
+                        let message = '';
+                        
+                        if (percent >= 70) {
+                          emoji = '🌟';
+                          title = 'ยอดเยี่ยมมาก!';
+                          message = 'ผลงานของหนูแสดงให้เห็นถึงความตั้งใจและความเข้าใจที่ดีมาก ขอให้รักษามาตรฐานแบบนี้ไว้ และพัฒนาศักยภาพของตนเองต่อไป ครูเชื่อมั่นในความสามารถของหนูนะ';
+                        } else if (percent >= 50) {
+                          emoji = '💪';
+                          title = 'ทำได้ดีขึ้นมากแล้ว';
+                          message = 'ความพยายามของหนูเริ่มเห็นผลชัดเจนแล้ว ลองตั้งใจอีกนิด ฝึกฝนอย่างสม่ำเสมอ หนูจะก้าวไปถึงระดับที่สูงขึ้นได้แน่นอน';
+                        } else if (percent >= 35) {
+                          emoji = '✨';
+                          title = 'หนูกำลังอยู่ระหว่างการพัฒนา';
+                          message = 'อย่าท้อใจนะ ความก้าวหน้าเริ่มต้นจากการลงมือทำ ลองฝึกโจทย์ให้มากขึ้น ทบทวนสิ่งที่เรียนอย่างสม่ำเสมอ ครูพร้อมช่วยหนูเสมอ';
+                        } else {
+                          emoji = '🌱';
+                          title = 'ทุกคนเรียนรู้ได้ในจังหวะของตนเอง';
+                          message = 'ขอให้หนูเริ่มต้นจากการตั้งใจเรียน ทบทวนทีละนิด และฝึกอย่างต่อเนื่อง ความสำเร็จจะค่อย ๆ เกิดขึ้น ครูเชื่อว่าหนูทำได้';
+                        }
+                        
+                        return `
+                          <div style="padding: 16px; background: linear-gradient(135deg, #fefce8 0%, #fef3c7 100%); border-radius: 12px; border: 2px solid rgba(234, 179, 8, 0.3);">
+                            <div style="font-size: ${baseSize * 1.1}px; font-weight: 700; color: #854d0e; margin-bottom: 8px; font-family: ${customFont}, sans-serif; display: flex; align-items: center; gap: 6px;">
+                              <span style="font-size: ${baseSize * 1.3}px;">${emoji}</span>
+                              ${title}
+                            </div>
+                            <div style="font-size: ${baseSize * 0.85}px; color: #713f12; line-height: 1.6; font-family: ${customFont}, sans-serif;">
+                              ${message}
+                            </div>
+                          </div>
+                        `;
+                      })()}
+                    ` : `
+                      <div style="padding: 32px 0; text-align: center;">
+                        <div style="font-size: ${baseSize * 2.5}px; margin-bottom: 12px;">😢</div>
+                        <div style="font-size: ${baseSize * 1.3}px; font-weight: 700; color: #dc2626; font-family: ${customFont}, sans-serif;">
+                          ขาดสอบ
+                        </div>
+                      </div>
+                    `}
                   </div>
-
-                  <div id="scores-container" class="grid grid-cols-1 gap-6 max-w-xl mx-auto"></div>
-                </div>
-
-                <div class="text-center bg-white rounded-2xl p-6 border-2 border-blue-200">
-                  <p id="encouragement-message" class="text-lg font-medium">🌟 เก่งมาก! ทำได้ดีเลยนะคะ 🌟</p>
-                </div>
-              </div>
-
+                `;
+              }).join('')}
             </div>
           </div>
-        </main>
+        </div>
       `;
 
-      document.getElementById('search-form').addEventListener('submit', (e) => {
-        e.preventDefault();
-        searchStudent();
-      });
-
-      onConfigChange(window.elementSdk ? window.elementSdk.config : defaultConfig);
-    }
-
-    if (window.elementSdk) {
-      window.elementSdk.init({
-        defaultConfig,
-        onConfigChange,
-        mapToCapabilities: (config) => ({
-          recolorables: [
-            { get: () => config.background_color || defaultConfig.background_color, set: (value) => window.elementSdk.setConfig({ background_color: value }) },
-            { get: () => config.surface_color || defaultConfig.surface_color, set: (value) => window.elementSdk.setConfig({ surface_color: value }) },
-            { get: () => config.text_color || defaultConfig.text_color, set: (value) => window.elementSdk.setConfig({ text_color: value }) },
-            { get: () => config.primary_action_color || defaultConfig.primary_action_color, set: (value) => window.elementSdk.setConfig({ primary_action_color: value }) },
-            { get: () => config.secondary_action_color || defaultConfig.secondary_action_color, set: (value) => window.elementSdk.setConfig({ secondary_action_color: value }) }
-          ],
-          borderables: [],
-          fontEditable: {
-            get: () => config.font_family || defaultConfig.font_family,
-            set: (value) => window.elementSdk.setConfig({ font_family: value })
-          },
-          fontSizeable: {
-            get: () => config.font_size || defaultConfig.font_size,
-            set: (value) => window.elementSdk.setConfig({ font_size: value })
-          }
-        }),
-        mapToEditPanelValues: (config) => new Map([
-          ['app_title', config.app_title || defaultConfig.app_title],
-          ['subtitle', config.subtitle || defaultConfig.subtitle],
-          ['teacher_info', config.teacher_info || defaultConfig.teacher_info],
-          ['input_label_1', config.input_label_1 || defaultConfig.input_label_1],
-          ['input_label_2', config.input_label_2 || defaultConfig.input_label_2],
-          ['button_text', config.button_text || defaultConfig.button_text]
-        ])
+      document.getElementById('logoutBtn').addEventListener('click', () => {
+        currentStudentId = null;
+        renderLoginPage();
       });
     }
 
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', init);
-    } else {
-      init();
-    }
+    initApp();
   </script>
-</body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9cc23258c50888d4',t:'MTc3MDc5NTYxMS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
