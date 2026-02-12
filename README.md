@@ -14,7 +14,7 @@
       font-family: 'Mitr', sans-serif;
     }
   </style>
-  <style>@view-transition { navigation: auto; }</style>
+  <script src="https://cdn.tailwindcss.com/3.4.17" type="text/javascript"></script>
   <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
  </head>
  <body class="h-full">
@@ -51,7 +51,7 @@
       "21431": { name: "เด็กหญิงวรรณวิสา อินรองพล", lesson1: 6, lesson2: 6, lesson3: 5 },
       "21932": { name: "เด็กหญิงนรสิตา อำนวย", lesson1: 9, lesson2: 3, lesson3: 4 },
       "22925": { name: "เด็กหญิงวรนิษฐ์ พงษ์จำปา", lesson1: 13, lesson2: 15, lesson3: 14 },
-      "22926": { name: "เด็กหญิงศิขรินทร์ สุขสด", lesson1: 10, lesson2: 7, lesson3: 16 },
+      "22926": { name: "เด็กหญิงศิขรินทร์ สุขสด", lesson1: 10, lesson2: 7, lesson3: 12 },
       "22927": { name: "เด็กหญิงภิญญดา ตั้งคุณธรรม", lesson1: 14, lesson2: 9, lesson3: 9 },
       "22928": { name: "เด็กหญิงณัฏฐณิชา จุลชีพ", lesson1: 15, lesson2: 10, lesson3: 13 },
       "22929": { name: "เด็กหญิงณิชาภัทร บุปผา", lesson1: 9, lesson2: 5, lesson3: 4 },
@@ -309,9 +309,9 @@
 
       const studentData = studentsData[currentStudentId];
       const lessons = [
-        { number: 1, name: "บทที่ 9: การวัดน้ำหนัก", icon: "⚖️", score: studentData.lesson1 },
-        { number: 2, name: "บทที่ 10: การวัดปริมาตร", icon: "📦", score: studentData.lesson2 },
-        { number: 3, name: "บทที่ 11: (หัวข้อเพิ่มเติม)", icon: "📚", score: studentData.lesson3 }
+        { number: 1, name: "บทที่ 9: การวัดความยาว", icon: "📏", score: studentData.lesson1 },
+        { number: 2, name: "บทที่ 10: การวัดน้ำหนัก", icon: "⚖️", score: studentData.lesson2 },
+        { number: 3, name: "บทที่ 11: การวัดปริมาตร", icon: "📦", score: studentData.lesson3 }
       ];
 
       app.innerHTML = `
@@ -450,5 +450,5 @@
 
     initApp();
   </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9cc23258c50888d4',t:'MTc3MDc5NTYxMS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9cca56896050ef74',t:'MTc3MDg4MDk3OS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
